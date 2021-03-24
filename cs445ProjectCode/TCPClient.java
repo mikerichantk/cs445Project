@@ -46,7 +46,7 @@ public class TCPClient {
             
             // print reply from server
             System.out.println("REPLY RECEIVED: " + reply);
-	    sentMsgs++;
+	    
 	    clientSocket.close();
 	  }            
 	
