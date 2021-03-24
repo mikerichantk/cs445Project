@@ -1,0 +1,68 @@
+import java.io.*;
+import java.net.*;
+import java.util.Arrays;
+/**
+ * example of creating a server receiving/sending data over TCP.
+ * process must be explicitly stopped to shut down server
+ * Socket Lab, java version
+ * @author Tammy VanDeGrift
+ * @version Spring 2021
+ */
+public class TCPServer {
+    /** starts a server that receives/sends data over TCP.
+     * uses port 9999 for communication
+     */
+    public static void main(String[] args) throws IOException {
+        // hold message and reply
+        String clientMessage, serverReply;
+	String[] arrayOfWords = new String[200];
+	Arrays.fill(arrayOfWords, "INVALID");
+        int currentWord = 0;
+	boolean activeGame = true;
+        try {
+            // create socket connection to port 9999
+            ServerSocket accepting = new ServerSocket(9999);
+            
+            // wait for clients to make connections
+            while(activeGame) {
+		
+                Socket connectionSocket = accepting.accept();
+                BufferedReader clientIn = new BufferedReader(new InputStreamReader		(connectionSocket.getInputStream()));
+                
+		
+                DataOutputStream clientOut = new DataOutputStream(connectionSocket.getOutputStream());
+		// clientOut.writeBytes("Welcome to the word-chain game! Please provide a word to start the game! NOTE: The max size a chain can be is 200 words. \n");
+
+                 // get message from client and captilatize the letters
+                 clientMessage = clientIn.readLine();
+		 if(arrayOfWords[currentWord] == "INVALID"){
+		    System.out.println("Before: " + arrayOfWords[currentWord]);
+		    serverReply = "Good Job! Now, add a new word to the chain." + "\nWord: ";
+		    // send client reply 
+                    clientOut.writeBytes(serverReply);
+		    arrayOfWords[currentWord] = clientMessage;
+		    System.out.println("After: " + arrayOfWords[currentWord]);
+		    currentWord = 0;
+		 } else if(clientMessage.equals(arrayOfWords[currentWord])){
+		    System.out.println("Attempted Word: " + clientMessage);
+		    serverReply = "Correct. Please provide the next word in the chain.\n"; 
+		    currentWord++;
+		    // send client reply 
+                    clientOut.writeBytes(serverReply);
+		 } else {
+		   serverReply = "G A M E : O V E R ! Your guess was incorrect. The correct word was: " + arrayOfWords[currentWord];
+		   // send client reply 
+                   clientOut.writeBytes(serverReply);
+		   currentWord = 0;
+		   activeGame = false;
+		   
+		 }
+		 // close
+                 connectionSocket.close();
+            }
+        }
+        catch (Exception e) {
+            System.out.println("An error occurred while creating server socket or reading/writing data to/from client.");
+        }
+    }
+}
