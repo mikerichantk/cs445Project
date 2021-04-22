@@ -19,6 +19,7 @@ public class TCPServer {
         Arrays.fill(arrayOfWords, "INVALID");
         int currentWord = 0;
         boolean activeGame = true;
+        boolean first = true;
         try {
             // create socket connection to port 9999
             ServerSocket accepting = new ServerSocket(9999);
@@ -35,24 +36,40 @@ public class TCPServer {
 
                 // get message from client and captilatize the letters
                 clientMessage = clientIn.readLine();
-                if(arrayOfWords[currentWord] == "INVALID"){
+                if(arrayOfWords[currentWord] == "INVALID" && first){
+                    serverReply = "Congrats on starting the chain. Start next turn." + "\nWord: ";
+                    clientOut.writeBytes(serverReply);
+                    arrayOfWords[currentWord] = clientMessage;
+                    currentWord = 0;
+                    first = false;
+                }
+                else if(arrayOfWords[currentWord] == "INVALID"){
                     System.out.println("Before: " + arrayOfWords[currentWord]);
-                    serverReply = "Good Job! Now, add a new word to the chain." + "\nWord: ";
+                    serverReply = "Good Job! New word added. Start next turn." + "\nWord: ";
                     // send client reply 
-                            clientOut.writeBytes(serverReply);
+                    clientOut.writeBytes(serverReply);
                     arrayOfWords[currentWord] = clientMessage;
                     System.out.println("After: " + arrayOfWords[currentWord]);
                     currentWord = 0;
-                } else if(clientMessage.equals(arrayOfWords[currentWord])){
+                }
+                else if(clientMessage.equals(arrayOfWords[currentWord]) && arrayOfWords[currentWord+1] == "INVALID"){
+                    System.out.println("Attempted Word: " + clientMessage);
+                    serverReply = "Round passed! Now, add a new word to the chain." + "\nWord: "; 
+                    currentWord++;
+                    // send client reply 
+                    clientOut.writeBytes(serverReply);
+                }
+                else if(clientMessage.equals(arrayOfWords[currentWord])){
                     System.out.println("Attempted Word: " + clientMessage);
                     serverReply = "Correct. Please provide the next word in the chain.\n"; 
                     currentWord++;
                     // send client reply 
                     clientOut.writeBytes(serverReply);
-                } else {
+                }
+                else {
                     serverReply = "G A M E : O V E R ! Your guess was incorrect. The correct word was: " + arrayOfWords[currentWord];
                     // send client reply 
-                            clientOut.writeBytes(serverReply);
+                    clientOut.writeBytes(serverReply);
                     currentWord = 0;
                     activeGame = false;
             
@@ -64,5 +81,6 @@ public class TCPServer {
         catch (Exception e) {
             System.out.println("An error occurred while creating server socket or reading/writing data to/from client.");
         }
+        
     }
 }
