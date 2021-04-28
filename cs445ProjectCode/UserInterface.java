@@ -127,7 +127,7 @@ public class UserInterface
         reply += ("*                                                                     *\n");
         reply += ("*                                                                     *\n");
         reply += ("*                                                                     *\n");
-        reply += ("     ATTEMPTED WORD CORRECT: '" + word + "'                            \n");
+        reply += ("*     ATTEMPTED WORD CORRECT: '" + word + "'                          *\n");
         reply += ("*                                                                     *\n");
         reply += ("*                   CORRECT! (" + currentWord + "/x)                  *\n");
         reply += ("*                                                                     *\n");
@@ -137,9 +137,26 @@ public class UserInterface
     }
 
     //for server
-    public void printMustReiterateChain()
+    public String printMustReiterateChain(String word, int numberOfWords)
     {
-
+        String pword = "words.";
+        if(numberOfWords == 0)
+        {
+            pword = "word.";
+        }
+        String reply = "";
+        reply += ("***********************************************************************\n");
+        reply += ("***********************************************************************\n");
+        reply += ("*                                                                     *\n");
+        reply += ("*                                                                     *\n");
+        reply += ("*                                                                     *\n");
+        reply += ("*                       YOUR NEW WORD: " + word + "                    \n");
+        reply += ("*                                                                     *\n");
+        reply += ("   Great! Now you must reiterate " + (numberOfWords+1) +" "+ pword +  "\n");
+        reply += ("*                                                                     *\n");
+        reply += ("***********************************************************************\n");
+        reply += "Reiteration: ";
+        return reply; 
     }
 
 

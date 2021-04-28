@@ -42,10 +42,11 @@ public class TCPServer
                 if(arrayOfWords[currentWord] == "INVALID")
                 {
                     System.out.println("Before: " + arrayOfWords[currentWord]);
-                    serverReply = "Good Job! Now, reiterate the chain." + "\nWord: ";
+                    //serverReply = "Good Job! Now, reiterate the chain." + "\nWord: ";
+                    serverReply = ui.printMustReiterateChain(clientMessage, currentWord);
                     reiteration = true; 
                     // send client reply 
-                            clientOut.writeBytes(serverReply);
+                    clientOut.writeBytes(serverReply);
                     arrayOfWords[currentWord] = clientMessage;
                     System.out.println("After: " + arrayOfWords[currentWord]);
                     currentWord = 0;
