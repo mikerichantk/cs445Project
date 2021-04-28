@@ -24,7 +24,28 @@ public class TCPServer {
         try {
             // create socket connection to port 9999
             ServerSocket accepting = new ServerSocket(9999);
+<<<<<<< Updated upstream
             
+=======
+
+            System.out.println("Hello World");
+            Socket connectionSocket = accepting.accept();
+            Socket pattySocket = accepting.accept();
+
+            BufferedReader clientIn = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+            DataOutputStream clientOut = new DataOutputStream(connectionSocket.getOutputStream());
+
+            clientOut.writeBytes("0x00\n");
+
+            System.out.println("first.");
+
+            BufferedReader pattyIn = new BufferedReader(new InputStreamReader(pattySocket.getInputStream()));
+            DataOutputStream pattyOut = new DataOutputStream(pattySocket.getOutputStream());
+            pattyOut.writeBytes("0x01\n");
+
+            System.out.println("Got both clients.");
+
+>>>>>>> Stashed changes
             // wait for clients to make connections
             while(activeGame) {
         
@@ -56,8 +77,9 @@ public class TCPServer {
                     serverReply = "Player one has played the first word which is: " + clientMessage;
                     pattyOut.writeBytes(serverReply);
                     currentTurn = 1;
-                    
                 }
+                // entered new word and end turn
+                // need to tell opponent the new word
                 else if(arrayOfWords[currentWord] == "INVALID"){
                     System.out.println("Before: " + arrayOfWords[currentWord]);
                     serverReply = "Good Job! New word added. Start next turn." + "\nWord: ";
@@ -66,10 +88,25 @@ public class TCPServer {
                     arrayOfWords[currentWord] = clientMessage;
                     System.out.println("After: " + arrayOfWords[currentWord]);
                     currentWord = 0;
+<<<<<<< Updated upstream
+=======
+                    if(currentTurn == 0){
+                        currentTurn = 1;
+                        pattyOut.writeBytes("0x01\n");
+                        clientOut.writeBytes("0x01\n");
+                    }
+                    else{
+                        currentTurn = 0;
+                        pattyOut.writeBytes("0x00\n");
+                        clientOut.writeBytes("0x00\n");
+                    }
+>>>>>>> Stashed changes
                 }
+                // entered last word of chain correctly
+                // need to say that the opponent got the whole chain correct and is adding a new word
                 else if(clientMessage.equals(arrayOfWords[currentWord]) && arrayOfWords[currentWord+1] == "INVALID"){
                     System.out.println("Attempted Word: " + clientMessage);
-                    serverReply = "Round passed! Now, add a new word to the chain." + "\nWord: "; 
+                    serverReply = "Round passed! Now, add a new word to the chain." + "Word: \n"; 
                     currentWord++;
                     // send client reply 
                     clientOut.writeBytes(serverReply);
@@ -80,6 +117,8 @@ public class TCPServer {
                         currentTurn = 0;
                     }
                 }
+                // entered a word in the chain correctly but there are more words left in the chain
+                // need to say that they got a word correct but there are still more words
                 else if(clientMessage.equals(arrayOfWords[currentWord])){
                     System.out.println("Attempted Word: " + clientMessage);
                     serverReply = "Correct. Please provide the next word in the chain.\n"; 

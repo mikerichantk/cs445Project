@@ -16,11 +16,56 @@ public class TCPClient {
      */
     public static void main(String[] args) throws IOException {
         // create Strings to store message and reply
-        String message, reply;
+        String message, reply, turn;
         boolean correctWord = true;
+        boolean currentTurn = false;
         System.out.println("Welcome to the Word-Chain Game! Please provide a word to begin the game. Be aware the max chain is 200 words.");
         try { 
+<<<<<<< Updated upstream
+=======
+
+            Socket clientSocket = new Socket("localhost", 9999);
+            // create streams for reading data from server
+            BufferedReader serverIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            DataOutputStream serverOut = new DataOutputStream(clientSocket.getOutputStream());
+
+            // retrieves the turn client has
+            System.out.println("Here");
+            turn = serverIn.readLine();
+
+            // Get who's turn is it
+            // Set current Turn true if this client's turn
+            String getTurn = serverIn.readLine();
+            if (getTurn.equals(turn)){
+                currentTurn = true;
+            }
+
+>>>>>>> Stashed changes
             while(correctWord){
+
+                // get data from server
+                reply = serverIn.readLine();
+                // Checks if player's turns have switched
+                if (reply.equals("0x01\n") && !reply.equals(turn)){
+                    currentTurn = false;
+                }
+                else if (reply.equals("0x00\n") && !reply.equals(turn)){
+                    currentTurn = false;
+                }
+                while (!currentTurn){
+                    reply = serverIn.readLine();
+                    if (reply.equals(turn)){
+                        currentTurn = true;
+                        System.out.println("Now it's your turn");
+                    }
+                    System.out.println(reply);
+                }
+
+                System.out.println(reply);
+                
+                // print reply from server
+                // System.out.println("REPLY RECEIVED: " + reply);
+
                 // create reader to acquire text
                 BufferedReader userIn = new BufferedReader(
                     new InputStreamReader(System.in));
@@ -36,6 +81,7 @@ public class TCPClient {
                 Socket clientSocket = new Socket("localhost", 9999);
                 DataOutputStream serverOut = new DataOutputStream(clientSocket.getOutputStream());
                 
+<<<<<<< Updated upstream
                 // create stream for reading data from server
                 BufferedReader serverIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 
@@ -49,6 +95,14 @@ public class TCPClient {
                 System.out.println("REPLY RECEIVED: " + reply);
             
                 clientSocket.close();
+=======
+                // get message from user
+                message = userIn.readLine();
+
+                
+                // send data to server
+                serverOut.writeBytes(message + '\n');
+>>>>>>> Stashed changes
             }            
 	
         }
