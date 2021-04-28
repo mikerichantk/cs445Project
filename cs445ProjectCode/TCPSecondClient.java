@@ -20,21 +20,22 @@ public class TCPSecondClient {
         boolean correctWord = true;
         System.out.println("Welcome to the Word-Chain Game! Please wait for player one to play the first turn. Be aware the max chain is 200 words.");
         try { 
+
+                Socket clientSocket = new Socket("localhost", 9999);
+                DataOutputStream serverOut = new DataOutputStream(clientSocket.getOutputStream());
             while(correctWord){
                 // create reader to acquire text
                 BufferedReader userIn = new BufferedReader(
                     new InputStreamReader(System.in));
-            
-                // get message from user
-                message = userIn.readLine();
             
                 // create socket connection on current machine at port 9999
                 // and attach stream for writing data
                 // connection is made to localhost (same machine), but could 
                 // instead put in 32-bit or 128-bit unsigned number
                 // for IP address or a string with the host name
-                Socket clientSocket = new Socket("localhost", 9999);
-                DataOutputStream serverOut = new DataOutputStream(clientSocket.getOutputStream());
+
+                // get message from user
+                message = userIn.readLine();
                 
                 // create stream for reading data from server
                 BufferedReader serverIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -43,14 +44,14 @@ public class TCPSecondClient {
                 serverOut.writeBytes(message + '\n');
                 
                 // get data from server
-                reply = serverIn.readLine();
+                //reply = serverIn.readLine();
                 
                 // print reply from server
-                System.out.println("REPLY RECEIVED: " + reply);
+                //System.out.println("REPLY RECEIVED: " + reply);
             
-                clientSocket.close();
             }            
-	
+	   
+            clientSocket.close();
         }
         catch(ConnectException e) {
             System.out.println("Error connecting to server. Check that server is running and accepting connections.");
