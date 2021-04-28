@@ -45,14 +45,6 @@ public class TCPServer {
                 
                 System.out.println("pre accept");
 
-                //Socket connectionSocket = accepting.accept();
-
-                System.out.println("first accept");
-
-                //Socket pattySocket = accepting.accept();
-
-                System.out.println("second accept");
-
                 // clientOut.writeBytes("Welcome to the word-chain game! Please provide a word to start the game! NOTE: The max size a chain can be is 200 words. \n");
 
 
@@ -69,6 +61,7 @@ public class TCPServer {
                 }
 
                 if(arrayOfWords[currentWord] == "INVALID" && first){
+                    System.out.println("entered first if statement");
                     serverReply = "Congrats on starting the chain. Start next turn." + "\nWord: ";
                     clientOut.writeBytes(serverReply);
                     arrayOfWords[currentWord] = clientMessage;
@@ -80,6 +73,7 @@ public class TCPServer {
                     
                 }
                 else if(arrayOfWords[currentWord] == "INVALID"){
+                    System.out.println("entered second if statement");
                     System.out.println("Before: " + arrayOfWords[currentWord]);
                     serverReply = "Good Job! New word added. Start next turn." + "\nWord: ";
                     // send client reply 
@@ -89,6 +83,7 @@ public class TCPServer {
                     currentWord = 0;
                 }
                 else if(clientMessage.equals(arrayOfWords[currentWord]) && arrayOfWords[currentWord+1] == "INVALID"){
+                    System.out.println("entered third if statement");
                     System.out.println("Attempted Word: " + clientMessage);
                     serverReply = "Round passed! Now, add a new word to the chain." + "\nWord: "; 
                     currentWord++;
@@ -102,6 +97,7 @@ public class TCPServer {
                     }
                 }
                 else if(clientMessage.equals(arrayOfWords[currentWord])){
+                    System.out.println("entered fourth if statement");
                     System.out.println("Attempted Word: " + clientMessage);
                     serverReply = "Correct. Please provide the next word in the chain.\n"; 
                     currentWord++;
@@ -109,6 +105,7 @@ public class TCPServer {
                     clientOut.writeBytes(serverReply);
                 }
                 else {
+                    System.out.println("entered last if statement");
                     serverReply = "G A M E : O V E R ! Your guess was incorrect. The correct word was: " + arrayOfWords[currentWord];
                     // send client reply 
                     clientOut.writeBytes(serverReply);
