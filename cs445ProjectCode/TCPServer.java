@@ -83,6 +83,12 @@ public class TCPServer {
                     arrayOfWords[currentWord] = clientMessage;
                     System.out.println("After: " + arrayOfWords[currentWord]);
                     currentWord = 0;
+                    if(currentTurn == 0){
+                        currentTurn = 1;
+                    }
+                    else{
+                        currentTurn = 0;
+                    }
                 }
                 else if(clientMessage.equals(arrayOfWords[currentWord]) && arrayOfWords[currentWord+1] == "INVALID"){
                     System.out.println("entered third if statement");

@@ -44,10 +44,10 @@ public class TCPSecondClient {
                 serverOut.writeBytes(message + '\n');
                 
                 // get data from server
-                reply = serverIn.readLine();
+                //reply = serverIn.readLine();
                 
                 // print reply from server
-                System.out.println("REPLY RECEIVED: " + reply);
+                //System.out.println("REPLY RECEIVED: " + reply);
             
             }            
 	   
