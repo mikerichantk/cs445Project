@@ -8,8 +8,7 @@ import java.net.*;
  * @version Spring 2021
  */
 public class TCPClient {
-    
-    /**
+   /**
      * creates a connection on the client side for sending data over TCP
      * reads from standard input stream and sends that data to the server
      * uses port 9999 on the localhost
@@ -21,8 +20,6 @@ public class TCPClient {
         boolean currentTurn = false;
         System.out.println("Welcome to the Word-Chain Game! Please provide a word to begin the game. Be aware the max chain is 200 words.");
         try { 
-<<<<<<< Updated upstream
-=======
 
             Socket clientSocket = new Socket("localhost", 9999);
             // create streams for reading data from server
@@ -33,6 +30,10 @@ public class TCPClient {
             System.out.println("Here");
             turn = serverIn.readLine();
 
+            // Notifies Client about which player/turn they are
+            reply = serverIn.readLine();
+            System.out.println(reply);
+
             // Get who's turn is it
             // Set current Turn true if this client's turn
             String getTurn = serverIn.readLine();
@@ -40,27 +41,28 @@ public class TCPClient {
                 currentTurn = true;
             }
 
->>>>>>> Stashed changes
             while(correctWord){
 
                 // get data from server
                 reply = serverIn.readLine();
                 // Checks if player's turns have switched
-                if (reply.equals("0x01\n") && !reply.equals(turn)){
+                if (reply.equals("0x01") && !reply.equals(turn)){
                     currentTurn = false;
                 }
-                else if (reply.equals("0x00\n") && !reply.equals(turn)){
+                else if (reply.equals("0x00") && !reply.equals(turn)){
                     currentTurn = false;
                 }
                 while (!currentTurn){
+                    System.out.println("Here");
+                    System.out.println(reply);
                     reply = serverIn.readLine();
                     if (reply.equals(turn)){
                         currentTurn = true;
                         System.out.println("Now it's your turn");
                     }
-                    System.out.println(reply);
                 }
 
+                System.out.println("out");
                 System.out.println(reply);
                 
                 // print reply from server
@@ -70,41 +72,15 @@ public class TCPClient {
                 BufferedReader userIn = new BufferedReader(
                     new InputStreamReader(System.in));
             
-                // get message from user
-                message = userIn.readLine();
-            
-                // create socket connection on current machine at port 9999
-                // and attach stream for writing data
-                // connection is made to localhost (same machine), but could 
-                // instead put in 32-bit or 128-bit unsigned number
-                // for IP address or a string with the host name
-                Socket clientSocket = new Socket("localhost", 9999);
-                DataOutputStream serverOut = new DataOutputStream(clientSocket.getOutputStream());
                 
-<<<<<<< Updated upstream
-                // create stream for reading data from server
-                BufferedReader serverIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                
-                // send data to server
-                serverOut.writeBytes(message + '\n');
-                
-                // get data from server
-                reply = serverIn.readLine();
-                
-                // print reply from server
-                System.out.println("REPLY RECEIVED: " + reply);
-            
-                clientSocket.close();
-=======
                 // get message from user
                 message = userIn.readLine();
 
                 
                 // send data to server
                 serverOut.writeBytes(message + '\n');
->>>>>>> Stashed changes
             }            
-	
+            clientSocket.close();
         }
         catch(ConnectException e) {
             System.out.println("Error connecting to server. Check that server is running and accepting connections.");
