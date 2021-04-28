@@ -24,27 +24,48 @@ public class TCPServer {
         try {
             // create socket connection to port 9999
             ServerSocket accepting = new ServerSocket(9999);
-            
+
+            System.out.println("Hello World");
+            Socket pattySocket = accepting.accept();
+            Socket connectionSocket = accepting.accept();
+
+            BufferedReader clientIn = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+            DataOutputStream clientOut = new DataOutputStream(connectionSocket.getOutputStream());
+
+            System.out.println("first.");
+
+            BufferedReader pattyIn = new BufferedReader(new InputStreamReader(pattySocket.getInputStream()));
+            DataOutputStream pattyOut = new DataOutputStream(pattySocket.getOutputStream());
+
+
+            System.out.println("Got both clients.");
+
             // wait for clients to make connections
             while(activeGame) {
-        
-                Socket connectionSocket = accepting.accept();
-                Socket pattySocket = accepting.accept();
+                
+                System.out.println("pre accept");
 
-                BufferedReader clientIn = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-                DataOutputStream clientOut = new DataOutputStream(connectionSocket.getOutputStream());
+                //Socket connectionSocket = accepting.accept();
 
-                BufferedReader pattyIn = new BufferedReader(new InputStreamReader(pattySocket.getInputStream()));
-                DataOutputStream pattyOut = new DataOutputStream(pattySocket.getOutputStream());
+                System.out.println("first accept");
+
+                //Socket pattySocket = accepting.accept();
+
+                System.out.println("second accept");
+
                 // clientOut.writeBytes("Welcome to the word-chain game! Please provide a word to start the game! NOTE: The max size a chain can be is 200 words. \n");
+
 
                 // get message from client and captilatize the letters
                 if(currentTurn == 0){
+                    System.out.println("entered if statement");
                     clientMessage = clientIn.readLine();
                     System.out.println("Here.");
                 }
                 else{
+                    System.out.println("entered else");
                     clientMessage = pattyIn.readLine();
+                    System.out.println("finished else");
                 }
 
                 if(arrayOfWords[currentWord] == "INVALID" && first){
@@ -95,9 +116,11 @@ public class TCPServer {
                     activeGame = false;
             
                 }
-                    // close
-                    connectionSocket.close();
+
             }
+            // close
+            connectionSocket.close();
+            pattySocket.close();
         }
         catch (Exception e) {
             System.out.println("An error occurred while creating server socket or reading/writing data to/from client.");
