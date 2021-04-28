@@ -26,8 +26,8 @@ public class TCPServer {
             ServerSocket accepting = new ServerSocket(9999);
 
             System.out.println("Hello World");
-            Socket pattySocket = accepting.accept();
             Socket connectionSocket = accepting.accept();
+            Socket pattySocket = accepting.accept();
 
             BufferedReader clientIn = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream clientOut = new DataOutputStream(connectionSocket.getOutputStream());
@@ -59,7 +59,7 @@ public class TCPServer {
                     clientMessage = pattyIn.readLine();
                     System.out.println("finished else");
                 }
-
+                // only accessed by current turn 0
                 if(arrayOfWords[currentWord] == "INVALID" && first){
                     System.out.println("entered first if statement");
                     serverReply = "Congrats on starting the chain. Start next turn." + "\nWord: ";
@@ -68,7 +68,9 @@ public class TCPServer {
                     currentWord = 0;
                     first = false;
                     serverReply = "Player one has played the first word which is: " + clientMessage;
+                    System.out.println("patty print 1");
                     pattyOut.writeBytes(serverReply);
+                    System.out.println("patty print 2");
                     currentTurn = 1;
                     
                 }
@@ -89,12 +91,6 @@ public class TCPServer {
                     currentWord++;
                     // send client reply 
                     clientOut.writeBytes(serverReply);
-                    if(currentTurn == 0){
-                        currentTurn = 1;
-                    }
-                    else{
-                        currentTurn = 0;
-                    }
                 }
                 else if(clientMessage.equals(arrayOfWords[currentWord])){
                     System.out.println("entered fourth if statement");
